@@ -287,6 +287,24 @@ function ringUp(e){
 }
 ringEl.addEventListener('pointerup',ringUp);ringEl.addEventListener('pointercancel',ringUp);
 
+// ---------- the iPad: no double-tap or pinch zoom anywhere on the page, and a full-screen button
+let lastTap=0;
+document.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTap<320&&!e.target.closest('input,select,textarea'))e.preventDefault();lastTap=now;},{passive:false});
+document.addEventListener('touchmove',e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault();},{passive:false});
+for(const ev of ['gesturestart','gesturechange','gestureend'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
+document.addEventListener('dblclick',e=>{if(!e.target.closest('input,select,textarea'))e.preventDefault();},{passive:false});
+const fsEl=document.documentElement;
+const inFull=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+function toggleFull(){
+ if(inFull()){(document.exitFullscreen||document.webkitExitFullscreen)?.call(document);return;}
+ const req=fsEl.requestFullscreen||fsEl.webkitRequestFullscreen;
+ if(req)Promise.resolve(req.call(fsEl)).catch(()=>setStatus('Full screen is not available here. Add the page to the Home Screen instead.'));
+ else setStatus('Full screen is not available here. Add the page to the Home Screen instead.');
+}
+q('#full').addEventListener('click',toggleFull);
+for(const ev of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(ev,()=>{q('#full').textContent=inFull()?'Exit full screen':'Full screen';setTimeout(()=>{layout();buildKeys();},150);});
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)q('#full').hidden=true;
+
 // ---------- the bar
 function setStatus(s){q('#status').textContent=s;}
 function refreshStatus(){

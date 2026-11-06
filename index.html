@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="Music Box">
 <meta name="description" content="A music box for two iPads facing each other across a table. Play a key, set a pin in the ring; when it comes round to the other side, their wooden hands play it.">
 <title>Music Box · for two</title>
-<link rel="stylesheet" href="src/styles.css?v=1">
+<link rel="stylesheet" href="src/styles.css?v=2">
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.186.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.186.1/examples/jsm/"}}</script>
-<script type="module" src="src/app.js?v=1"></script>
+<script type="module" src="src/app.js?v=2"></script>
 </head>
 <body>
 <div id="ring-space" aria-label="The music box ring. Push it round, or tap a pin to take it off."></div>
@@ -26,6 +26,7 @@
  <select id="movements" aria-label="Kept movements"></select>
  <button type="button" id="clear" title="Take every pin off">Clear</button>
  <button type="button" id="seam" title="How far your screen's edge is from the middle of the seam">Seam</button>
+ <button type="button" id="full" title="Fill the screen">Full screen</button>
 </div>
 <div id="seam-row" hidden><label>Edge to seam <input type="range" id="gap" min="0" max="40" step="1" value="10"> <span id="gap-val">10 mm</span></label><span class="hint">Lay the iPads end to end, far edges touching. Set this so the ring meets across the gap.</span></div>
 <div id="keys" role="group" aria-label="Your keyboard"></div>
