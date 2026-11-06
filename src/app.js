@@ -5,7 +5,7 @@
 // comb, that player's wooden hands play it on their piano. The two devices
 // run the rings from one clock, so the box stays in step however long it runs.
 import * as LIVE from './live.js';
-import {createStage} from './stage.js';
+import {createStage} from './stage.js?v=3';
 
 const q=s=>document.querySelector(s);
 const TAU=Math.PI*2;
