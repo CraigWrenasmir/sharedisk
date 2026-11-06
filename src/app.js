@@ -289,7 +289,7 @@ ringEl.addEventListener('pointerup',ringUp);ringEl.addEventListener('pointercanc
 
 // ---------- the iPad: no double-tap or pinch zoom anywhere on the page, and a full-screen button
 let lastTap=0;
-document.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTap<320&&!e.target.closest('input,select,textarea'))e.preventDefault();lastTap=now;},{passive:false});
+document.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTap<320&&!e.target.closest('button,input,select,textarea,a'))e.preventDefault();lastTap=now;},{passive:false});
 document.addEventListener('touchmove',e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault();},{passive:false});
 for(const ev of ['gesturestart','gesturechange','gestureend'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
 document.addEventListener('dblclick',e=>{if(!e.target.closest('input,select,textarea'))e.preventDefault();},{passive:false});
