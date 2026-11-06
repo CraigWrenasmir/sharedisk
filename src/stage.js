@@ -105,7 +105,7 @@ function makeEngine(onOn,onOff){
    if(hand.fingers[b.f])this.noteOff(hand.fingers[b.f]);
    hand.fingers[b.f]=midi;hand.since[b.f]=++this.counter;this.held.set(midi,{hand,f:b.f});
    this.sounding.set(midi,tag);this.retarget(hand);
-   onOn(midi,vel);
+   onOn(midi,vel,tag);
   },
   noteOff(midi){
    const h=this.held.get(midi);if(!h)return;
@@ -246,7 +246,7 @@ export async function createStage(cv,{lo=36,hi=96,palette,onNoteOn,onNoteOff}){
   const f=engine.frame();
   rigs.R.apply(f.R);rigs.L.apply(f.L);
   const dip=new Map();for(let i=0;i<f.dips.length;i+=2)dip.set(f.dips[i],f.dips[i+1]);
-  for(const [midi,m] of keyMeshes){const d=Math.max(dip.get(midi)||0,m.geometry.userData.restDip);m.rotation.x=-d*KEY_DIP/(-PIVOT_Z);const tag=engine.sounding.get(midi);m.material=tag==='theirs'?KEY_THEIRS:tag?KEY_MINE:engine.live.has(midi)?KEY_LIVE:(m.geometry.userData.black?KEY_BLACK:KEY_WHITE);}
+  for(const [midi,m] of keyMeshes){const d=Math.max(dip.get(midi)||0,m.geometry.userData.restDip);m.rotation.x=-d*KEY_DIP/(-PIVOT_Z);const tag=engine.sounding.get(midi);m.material=tag==='theirs'?KEY_THEIRS:tag==='live'?KEY_LIVE:tag?KEY_MINE:engine.live.has(midi)?KEY_LIVE:(m.geometry.userData.black?KEY_BLACK:KEY_WHITE);}
   const cx=(f.L.wrist[0]+f.R.wrist[0])/2,spread=Math.abs(f.L.wrist[0]-f.R.wrist[0]);
   const aspect=W/H,wide=Math.max(0,2.8/aspect-1); // a shallower band sits the camera a little closer
   const want=new THREE.Vector3(cx,0.44+spread*0.3-wide*0.05,0.38+spread*0.25-wide*0.04),wantAt=new THREE.Vector3(cx,0.0,0.0);

@@ -227,7 +227,7 @@ function buildKeys(){
 }
 function keyDown(midi,vel){
  if(heldPins.has(midi))keyUp(midi);
- piano.noteOn('k'+midi,midi,vel);stage?.engine.live.add(midi);
+ piano.noteOn('k'+midi,midi,vel);stage?.engine.noteOn(midi,vel,'live'); // the hands play what you play
  q('#keys').querySelector(`[data-midi="${midi}"]`)?.classList.add('is-down');
  const now=serverNow();
  // a wave from the key toward the seam
@@ -241,7 +241,7 @@ function keyDown(midi,vel){
  send({t:'pin',pin:{id:pin.id,ring,a:pin.a,len:0,midi,vel,born:now,open:true}});
 }
 function keyUp(midi){
- piano.noteOff('k'+midi);stage?.engine.live.delete(midi);
+ piano.noteOff('k'+midi);stage?.engine.noteOff(midi);
  q('#keys').querySelector(`[data-midi="${midi}"]`)?.classList.remove('is-down');
  const pin=heldPins.get(midi);
  if(pin){heldPins.delete(midi);pin.len=Math.max(0.02,Math.abs(theta(pin.ring,serverNow())-pin._thetaAt));pin.open=false;send({t:'pinend',id:pin.id,len:pin.len});}
@@ -358,7 +358,7 @@ q('#join-form').addEventListener('submit',async e=>{
  piano.init();
  q('#join-btn').disabled=true;q('#join-btn').textContent='Opening…';
  try{
-  if(!stage){stage=await createStage(q('#stage'),{lo:PITCH_LO,hi:PITCH_HI,palette:PALETTE,onNoteOn:(midi,vel)=>piano.noteOn('p'+midi,midi,vel),onNoteOff:midi=>piano.noteOff('p'+midi)});}
+  if(!stage){stage=await createStage(q('#stage'),{lo:PITCH_LO,hi:PITCH_HI,palette:PALETTE,onNoteOn:(midi,vel,tag)=>{if(tag!=='live')piano.noteOn('p'+midi,midi,vel);},onNoteOff:midi=>piano.noteOff('p'+midi)});}
  }catch(err){q('#join-btn').disabled=false;q('#join-btn').textContent='Join';q('#join-error').textContent='The hands could not load: '+err.message;return;}
  joined=true;connect();
 });
