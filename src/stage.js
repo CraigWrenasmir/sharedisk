@@ -1,6 +1,6 @@
 // The stage: an old piano keyboard with two wooden hands, drawn as an engraved
 // plate. The hands are the Mechanical Pianist's model and measurements (from
-// The Listening Field: Hands); they play whatever notes the music box hands
+// The Listening Field: Hands); they play whatever notes Sharedisk hands
 // them, choosing fingers note by note. The player's own keys dip without hands.
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';

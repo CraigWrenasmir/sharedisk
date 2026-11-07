@@ -1,4 +1,4 @@
-// Music Box: two iPads facing each other across a table, their far edges
+// Sharedisk: two iPads facing each other across a table, their far edges
 // touching. Each player has a keyboard at their own edge. Between them, across
 // the seam, a slow brass ring turns like the cylinder of a music box seen from
 // above. Playing a key sets a pin into the ring; when a pin passes a player's
@@ -15,15 +15,17 @@ const FRICTION=25;        // seconds for a push to settle back to the ring's own
 const LIFE_TURNS=10;      // a pin fades over this many turns, then is gone
 const PITCH_LO=36,PITCH_HI=96;
 const COMB={A:Math.PI/2,B:-Math.PI/2};  // world angle of each player's comb: A sits at +y, B at -y
-const RELAY=location.hostname==='localhost'||location.hostname==='127.0.0.1'?'ws://127.0.0.1:5077/music-box/ws':'wss://tools.theuniversalsandpit.org/music-box/ws';
+const RELAY=location.hostname==='localhost'||location.hostname==='127.0.0.1'?'ws://127.0.0.1:5077/sharedisk/ws':'wss://tools.theuniversalsandpit.org/sharedisk/ws';
 const PX_PER_MM=132/25.4; // iPad screens, near enough
 
 // ---------- settings remembered on this device
 const store={
- get(k,d){try{const v=localStorage.getItem('music-box:'+k);return v===null?d:JSON.parse(v);}catch{return d;}},
- set(k,v){try{localStorage.setItem('music-box:'+k,JSON.stringify(v));}catch{}},
+ get(k,d){try{const v=localStorage.getItem('sharedisk:'+k);return v===null?d:JSON.parse(v);}catch{return d;}},
+ set(k,v){try{localStorage.setItem('sharedisk:'+k,JSON.stringify(v));}catch{}},
 };
-const clientId=(()=>{try{let id=sessionStorage.getItem('music-box:id');if(!id){id=Math.random().toString(36).slice(2,10)+Date.now().toString(36);sessionStorage.setItem('music-box:id',id);}return id;}catch{return Math.random().toString(36).slice(2,12);}})(); // per tab, so a second tab on one device takes the other seat
+// carry over anything saved while this was called Music Box
+try{for(const k of Object.keys(localStorage)){if(k.startsWith('music-box:')){const n='sharedisk:'+k.slice(10);if(localStorage.getItem(n)===null)localStorage.setItem(n,localStorage.getItem(k));localStorage.removeItem(k);}}}catch{}
+const clientId=(()=>{try{let id=sessionStorage.getItem('sharedisk:id');if(!id){id=Math.random().toString(36).slice(2,10)+Date.now().toString(36);sessionStorage.setItem('sharedisk:id',id);}return id;}catch{return Math.random().toString(36).slice(2,12);}})(); // per tab, so a second tab on one device takes the other seat
 const WORDS=['wren','field','fig','oak','tide','harbour','moss','lark','gum','reed','cove','fern','shell','sand','kite','pelican','dune','bay','cliff','lantern','rain','bench','willow','river','stone','cloud'];
 const newCode=()=>WORDS[Math.random()*WORDS.length|0]+'-'+WORDS[Math.random()*WORDS.length|0];
 
